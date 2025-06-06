@@ -31,7 +31,6 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignIn extends AppCompatActivity {
-
     Context context = this;
     EditText et_email;
     EditText et_psw;
