@@ -4,8 +4,10 @@ package avigdor.projectz.myapplication;
 import static avigdor.projectz.myapplication.classes.FBRef.refAuth;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -30,19 +32,32 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignIn extends AppCompatActivity {
 
+    Context context = this;
     EditText et_email;
     EditText et_psw;
+    Button btn_sign_in_up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
+        init();
     }
 
     public void init (){
         et_email = findViewById(R.id.et_email);
         et_psw = findViewById(R.id.et_psw);
+        btn_sign_in_up = findViewById(R.id.sign_in_up_btn);
+
+        btn_sign_in_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // CORRECTED: Use YourActivityName.this to get the Activity context
+                Toast.makeText(context, "btn clicked", Toast.LENGTH_SHORT).show();
+                signIn(v); // Assuming signIn is a method in this Activity
+            }
+        });
     }
 
     public void signIn(View view) {
@@ -50,42 +65,64 @@ public class SignIn extends AppCompatActivity {
         String password = et_psw.getText().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "please fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "please fill all fields", Toast.LENGTH_SHORT).show();
         }
         else{
             ProgressDialog pd = new ProgressDialog(this);
             pd.setTitle("Sign in");
             pd.setMessage("Signing in...");
             pd.show();
-            refAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                           pd.dismiss();
-                           if (task.isSuccessful()){
-                               FirebaseUser user = refAuth.getCurrentUser();
-                               Toast.makeText(SignIn.this, "Sign in successful", Toast.LENGTH_SHORT).show();
-                           }
-                           else{
-                               Exception exp = task.getException();
-                               if (exp instanceof FirebaseAuthInvalidUserException){
-                                   Toast.makeText(SignIn.this, "Invalid email", Toast.LENGTH_SHORT).show();
-                               } else if (exp instanceof FirebaseAuthWeakPasswordException) {
-                                   Toast.makeText(SignIn.this, "Weak password", Toast.LENGTH_SHORT).show();
-                               }
-                               else if(exp instanceof FirebaseAuthUserCollisionException){
-                                   Toast.makeText(SignIn.this, "User already exists", Toast.LENGTH_SHORT).show();
-                               } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
-                                   Toast.makeText(SignIn.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
-                               } else if (exp instanceof FirebaseNetworkException) {
-                                   Toast.makeText(SignIn.this, "Network error", Toast.LENGTH_SHORT).show();
-                               } else{
-                                   Toast.makeText(SignIn.this, "Sign in failed", Toast.LENGTH_SHORT).show();
-                               }
-                           }
+            if(refAuth.getCurrentUser() != null){
+                refAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        pd.dismiss();
+                        if (task.isSuccessful()){
+                            FirebaseUser user = refAuth.getCurrentUser();
+                            Toast.makeText(context, "Sign in uesr " + user.getEmail() + " successful", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                        else{
+                            Exeptions(task.getException());
+                        }
+                    }
+                });
+
+            }else{
+                refAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(SignIn.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                pd.dismiss();
+                                if (task.isSuccessful()){
+                                    FirebaseUser user = refAuth.getCurrentUser();
+                                    Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Exeptions(task.getException());
+                                }
+                            }
+                        });
+            }
+
         }
 
+    }
+
+    public void Exeptions(Exception exp){
+
+        if (exp instanceof FirebaseAuthInvalidUserException){
+            Toast.makeText(context, "Invalid email", Toast.LENGTH_SHORT).show();
+        } else if (exp instanceof FirebaseAuthWeakPasswordException) {
+            Toast.makeText(context, "Weak password", Toast.LENGTH_SHORT).show();
+        }
+        else if(exp instanceof FirebaseAuthUserCollisionException){
+            Toast.makeText(context, "User already exists", Toast.LENGTH_SHORT).show();
+        } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
+            Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show();
+        } else if (exp instanceof FirebaseNetworkException) {
+            Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show();
+        } else{
+            Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show();
+        }
     }
 }
