@@ -28,6 +28,7 @@ public class Registration extends AppCompatActivity {
     private static final int MIN_PASSWORD_LENGTH = 6;
     private static final String SPECIAL_CHAR_SET_DISPLAY = "@, #, $, %, ^, &, +, =, ?, !";
     private static final String SPECIAL_CHAR_REGEX_PART = "@#$%^&+=?!";
+    private static final String PHONE_REGEX = "^\\+?[0-9]{10,13}$";
 
     EditText email_et, password_et, confirmPassword_et, fname_et, lname_et, phone_et, age_et;
     String email, password, fname, lname, phone, confirmPassword, age;
@@ -94,8 +95,26 @@ public class Registration extends AppCompatActivity {
             age_et.requestFocus();
             return;
         }
+        int ageVal;
+        try {
+            ageVal = Integer.parseInt(age);
+            if (ageVal <= 10 || ageVal > 120) { // Example: Basic age range validation
+                Toast.makeText(context, "Please enter a valid age (10-120).", Toast.LENGTH_LONG).show();
+                age_et.requestFocus();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(context, "Age must be a valid number.", Toast.LENGTH_LONG).show();
+            age_et.requestFocus();
+            return;
+        }
         if (phone.isEmpty()) {
             Toast.makeText(context, "Please fill all required fields. Phone is missing.", Toast.LENGTH_LONG).show();
+            phone_et.requestFocus();
+            return;
+        }
+        if (!isValidPhoneNumber(phone)) {
+            Toast.makeText(context, "Please enter a valid phone number (e.g., 10-13 digits, optionally starting with '+').", Toast.LENGTH_LONG).show();
             phone_et.requestFocus();
             return;
         }
@@ -104,19 +123,14 @@ public class Registration extends AppCompatActivity {
             email_et.requestFocus();
             return;
         }
-        if (password.isEmpty()) {
-            Toast.makeText(context, "Please fill all required fields. Password is missing.", Toast.LENGTH_LONG).show();
-            password_et.requestFocus();
-            return;
-        }
-        if (confirmPassword.isEmpty()) {
-            Toast.makeText(context, "Please fill all required fields. Confirm Password is missing.", Toast.LENGTH_LONG).show();
-            confirmPassword_et.requestFocus();
-            return;
-        }
         if (!isValidEmailPattern(email)) {
             Toast.makeText(context, "Invalid email format.", Toast.LENGTH_SHORT).show();
             email_et.requestFocus();
+            return;
+        }
+        if (password.isEmpty()) {
+            Toast.makeText(context, "Please fill all required fields. Password is missing.", Toast.LENGTH_LONG).show();
+            password_et.requestFocus();
             return;
         }
 
@@ -127,6 +141,13 @@ public class Registration extends AppCompatActivity {
             password_et.requestFocus();
             return;
         }
+
+        if (confirmPassword.isEmpty()) {
+            Toast.makeText(context, "Please fill all required fields. Confirm Password is missing.", Toast.LENGTH_LONG).show();
+            confirmPassword_et.requestFocus();
+            return;
+        }
+
         if (!password.equals(confirmPassword)) {
 
             Toast.makeText(context, "Passwords do not match.", Toast.LENGTH_LONG).show();
@@ -151,6 +172,10 @@ public class Registration extends AppCompatActivity {
                         }
                     }
             });
+    }
+
+    private boolean isValidPhoneNumber(String phone) {
+        return phone.matches(PHONE_REGEX);
     }
 
 
