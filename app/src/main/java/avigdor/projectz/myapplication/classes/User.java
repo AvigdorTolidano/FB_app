@@ -6,7 +6,7 @@ import java.util.Date;
 public class User {
     private String fname, lname, email, phone, uid, dateOfBirth;
     private int age;
-
+    public User(){}
     public User(String fname, String lname, String email, String phone, String uid, String dateOfBirth) {
         this.dateOfBirth=dateOfBirth;
         this.fname = fname;
