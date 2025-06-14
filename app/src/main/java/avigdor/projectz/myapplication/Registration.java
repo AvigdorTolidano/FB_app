@@ -2,11 +2,13 @@ package avigdor.projectz.myapplication;
 
 import static avigdor.projectz.myapplication.classes.FBRef.refAuth;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -22,17 +24,19 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import avigdor.projectz.myapplication.classes.User;
 
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class Registration extends AppCompatActivity {
     private static final int MIN_PASSWORD_LENGTH = 6;
     private static final String SPECIAL_CHAR_SET_DISPLAY = "@, #, $, %, ^, &, +, =, ?, !";
     private static final String SPECIAL_CHAR_REGEX_PART = "@#$%^&+=?!";
-    private static final String PHONE_REGEX = "^\\+?[0-9]{10,13}$";
+    private static final String PHONE_REGEX = "^\\+?[0-9]{10,14}$";
 
-    EditText email_et, password_et, confirmPassword_et, fname_et, lname_et, phone_et, age_et;
-    String email, password, fname, lname, phone, confirmPassword, age;
-    Button register_btn;
+    EditText email_et, password_et, confirmPassword_et, fname_et, lname_et, phone_et;
+    String email, password, fname, lname, phone, confirmPassword, dateOfBirth;
+    Button datePicker;
+    DatePickerDialog datePickerDialog;
 
     User myUser;
 
@@ -48,28 +52,44 @@ public class Registration extends AppCompatActivity {
 
     }
 
-    private void init(){
-        register_btn = findViewById(R.id.regitration_btn);
+    private void init() {
+
         email_et = findViewById(R.id.email_et);
         password_et = findViewById(R.id.psw_et);
         confirmPassword_et = findViewById(R.id.cpsw_et);
         fname_et = findViewById(R.id.fname_et);
         lname_et = findViewById(R.id.lname_et);
         phone_et = findViewById(R.id.phone_et);
-        age_et = findViewById(R.id.age_et);
+        datePicker = findViewById(R.id.date_picker);
 
+        Calendar today=Calendar.getInstance();
+
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.add(Calendar.YEAR, -18);
+
+        Calendar minDate = Calendar.getInstance();
+        minDate.add(Calendar.YEAR, -100);
+
+        datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        datePicker.setText(String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year));
+                        dateOfBirth = String.format("%04d%02d%02d", year, month + 1, dayOfMonth);
+                    }
+                },
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH) );
+
+        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+        datePickerDialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
 
         pd = new ProgressDialog(context);
         pd.setTitle("Registration");
         pd.setMessage("Please wait...");
         pd.setCancelable(false);
 
-        register_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submit(view);
-            }
-        });
     }
     public void submit(View view) {
         email = email_et.getText().toString();
@@ -78,7 +98,6 @@ public class Registration extends AppCompatActivity {
         fname = fname_et.getText().toString();
         lname = lname_et.getText().toString();
         phone = phone_et.getText().toString();
-        age = age_et.getText().toString();
 
         if (fname.isEmpty()) {
             Toast.makeText(context, "Please fill all required fields. First Name is missing.", Toast.LENGTH_LONG).show();
@@ -90,24 +109,12 @@ public class Registration extends AppCompatActivity {
             lname_et.requestFocus();
             return;
         }
-        if (age_et.getText().toString().isEmpty()) {
+       if (datePicker.getText().toString().isEmpty()) {
             Toast.makeText(context, "Please fill all required fields. Age is missing.", Toast.LENGTH_LONG).show();
-            age_et.requestFocus();
+            datePicker.requestFocus();
             return;
         }
-        int ageVal;
-        try {
-            ageVal = Integer.parseInt(age);
-            if (ageVal <= 10 || ageVal > 120) { // Example: Basic age range validation
-                Toast.makeText(context, "Please enter a valid age (10-120).", Toast.LENGTH_LONG).show();
-                age_et.requestFocus();
-                return;
-            }
-        } catch (NumberFormatException e) {
-            Toast.makeText(context, "Age must be a valid number.", Toast.LENGTH_LONG).show();
-            age_et.requestFocus();
-            return;
-        }
+
         if (phone.isEmpty()) {
             Toast.makeText(context, "Please fill all required fields. Phone is missing.", Toast.LENGTH_LONG).show();
             phone_et.requestFocus();
@@ -164,7 +171,7 @@ public class Registration extends AppCompatActivity {
                         pd.dismiss();
                         if (task.isSuccessful()){
                             FirebaseUser user = refAuth.getCurrentUser();
-                            myUser = new User(fname, lname, email, phone, user.getUid(), Integer.parseInt(age));
+                            myUser = new User(fname, lname, email, phone, user.getUid(), dateOfBirth);
                             Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show();
                         }
                         else{
@@ -227,5 +234,9 @@ public class Registration extends AppCompatActivity {
         } else{
             Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void pick(View view){
+        datePickerDialog.show();
     }
 }
