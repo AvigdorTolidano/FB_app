@@ -31,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignIn extends AppCompatActivity {
     Context context = this;
@@ -90,7 +92,7 @@ public class SignIn extends AppCompatActivity {
                     if (task.isSuccessful()){
                         FirebaseUser user = refAuth.getCurrentUser();
                         Toast.makeText(context, user.getEmail() + " successfuly signed in", Toast.LENGTH_SHORT).show();
-                        refAuth.signOut();
+
                     }
                     else{
                         Exeptions(task.getException());

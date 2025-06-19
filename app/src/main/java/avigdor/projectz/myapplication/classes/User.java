@@ -6,6 +6,8 @@ import java.util.Date;
 public class User {
     private String fname, lname, email, phone, uid, dateOfBirth;
     private int age;
+
+    private static boolean isOnline ;
     public User(){}
     public User(String fname, String lname, String email, String phone, String uid, String dateOfBirth) {
         this.dateOfBirth=dateOfBirth;
@@ -14,6 +16,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.uid = uid;
+        this.isOnline = false;
         calculateAge();
     }
 
@@ -61,6 +64,17 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+    public void setOnline(boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+
     private void calculateAge(){
         Calendar today=Calendar.getInstance();
         Calendar birthDate=Calendar.getInstance();
@@ -72,9 +86,7 @@ public class User {
             this.age--;
         }
     }
-    public String getUid() {
-        return uid;
-    }
+
 
 
 

@@ -1,6 +1,8 @@
 package avigdor.projectz.myapplication;
 
 import static avigdor.projectz.myapplication.classes.FBRef.refAuth;
+import static avigdor.projectz.myapplication.classes.FBRef.refBirthday;
+import static avigdor.projectz.myapplication.classes.FBRef.refUser;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -172,7 +174,10 @@ public class Registration extends AppCompatActivity {
                         if (task.isSuccessful()){
                             FirebaseUser user = refAuth.getCurrentUser();
                             myUser = new User(fname, lname, email, phone, user.getUid(), dateOfBirth);
+                            refUser.child(user.getUid()).setValue(myUser);
+                            refBirthday.child(dateOfBirth.substring(4,8)).child(user.getUid()).setValue(myUser.getUid());
                             Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show();
+                            refAuth.signOut();
                         }
                         else{
                             Exeptions(task.getException());
