@@ -1,6 +1,7 @@
 package avigdor.projectz.myapplication;
 
 import static avigdor.projectz.myapplication.classes.FBRef.refAuth;
+import static avigdor.projectz.myapplication.classes.FBRef.refUser;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+
+import avigdor.projectz.myapplication.classes.User;
 
 public class MainActivity extends AppCompatActivity {
     Context context = this;
@@ -27,13 +31,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = refAuth.getCurrentUser();
-        if (user != null) {
-            Intent intent = new Intent(context, MainActivity.class);
-            startActivity(intent);
-        }
-    }
+
 }

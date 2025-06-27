@@ -2,6 +2,7 @@ package avigdor.projectz.myapplication;
 
 
 import static avigdor.projectz.myapplication.classes.FBRef.refAuth;
+import static avigdor.projectz.myapplication.classes.FBRef.refUser;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import avigdor.projectz.myapplication.classes.FBRef.*;
+import avigdor.projectz.myapplication.classes.User;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,11 +39,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignIn extends AppCompatActivity {
     Context context = this;
-    EditText email_et;
-    EditText psw_et;
+    EditText email_et , psw_et , name_et , lname_et ;
+    TextView email_txt , name_txt , lname_txt , title_txt , registration_txtBtn , error_txt;
     Button btn_sign_in;
-
-    TextView registration_txtBtn;
+    boolean isNewUser;
+    ProgressDialog pd;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,32 +57,82 @@ public class SignIn extends AppCompatActivity {
     public void init () {
         email_et = findViewById(R.id.email_et);
         psw_et = findViewById(R.id.psw_et);
+        name_et = findViewById(R.id.name_et);
+        lname_et = findViewById(R.id.lname_et);
         btn_sign_in = findViewById(R.id.btn_sign_in);
+        email_txt = findViewById(R.id.email_txt);
+        name_txt = findViewById(R.id.name_txt);
+        lname_txt = findViewById(R.id.lname_txt);
+        title_txt = findViewById(R.id.title_txt);
         registration_txtBtn = findViewById(R.id.registration_txtBtn);
+        error_txt = findViewById(R.id.error_txt);
+        isNewUser = false;
 
         btn_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn(v);
+                signIU(v);
             }
         });
 
         registration_txtBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, Registration.class);
-                startActivity(intent);
-            }
+            public void onClick(View v) { setView(v); }
         });
+
+        pd = new ProgressDialog(context);
+        pd.setTitle("Sign in");
+        pd.setMessage("Signing in...");
+        intent = new Intent(context, MainActivity.class);
     }
 
-    public void signIn(View view) {
+    public void signIU(View view) {
         String email = email_et.getText().toString();
         String password = psw_et.getText().toString();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(context, "please fill all fields", Toast.LENGTH_SHORT).show();
+        if (isNewUser){
+            String name = name_et.getText().toString();
+            String lname = lname_et.getText().toString();
+            pd.setTitle("Sign up");
+            pd.setMessage("Signing up...");
+            if (email.isEmpty() || password.isEmpty() || name.isEmpty() || lname.isEmpty()) {
+                error_txt.setText("please fill all fields!");
+                error_txt.setVisibility(View.VISIBLE);
+                if (name.isEmpty()) {
+                    name_et.requestFocus();
+                }
+                else if (lname.isEmpty()) {
+                    lname_et.requestFocus();
+                }
+                else if (email.isEmpty()) {
+                    email_et.requestFocus();
+                }
+                else if (password.isEmpty()) {
+                    psw_et.requestFocus();
+                }
+            }
+            else{
+                pd.show();
+                refAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        pd.dismiss();
+                        if (task.isSuccessful()){
+                            FirebaseUser user = refAuth.getCurrentUser();
+                            refUser.child(user.getUid()).setValue(new User(name,lname,email,user.getUid()));
+
+                            startActivity(intent);
+                        }
+                        else{
+                            Exeptions(task.getException());
+                        }
+                    }
+                });
+            }
+
+
         }
+
         else{
             ProgressDialog pd = new ProgressDialog(context);
             pd.setTitle("Sign in");
@@ -105,19 +159,45 @@ public class SignIn extends AppCompatActivity {
     }
     public void Exeptions(Exception exp){
 
-        if (exp instanceof FirebaseAuthInvalidUserException){
-            Toast.makeText(context, "Invalid email", Toast.LENGTH_SHORT).show();
-        } else if (exp instanceof FirebaseAuthWeakPasswordException) {
-            Toast.makeText(context, "Weak password", Toast.LENGTH_SHORT).show();
-        }
-        else if(exp instanceof FirebaseAuthUserCollisionException){
-            Toast.makeText(context, "User already exists", Toast.LENGTH_SHORT).show();
-        } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
-            Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show();
+        if (exp instanceof FirebaseAuthInvalidCredentialsException){
+            error_txt.setText(exp.getMessage());
+            email_et.requestFocus();
+        } else if (exp instanceof FirebaseAuthInvalidUserException) {
+            error_txt.setText(exp.getMessage());
+            email_et.requestFocus();
+        }else if (exp instanceof FirebaseAuthWeakPasswordException) {
+            error_txt.setText(((FirebaseAuthWeakPasswordException) exp).getReason());
+            psw_et.requestFocus();
+        } else if(exp instanceof FirebaseAuthUserCollisionException){
+            error_txt.setText(exp.getMessage());
+            email_et.requestFocus();
         } else if (exp instanceof FirebaseNetworkException) {
-            Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show();
+            error_txt.setText(exp.getMessage());
         } else{
             Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void setView(View v){
+        isNewUser = !isNewUser;
+        if (isNewUser){
+            email_txt.setVisibility(View.VISIBLE);
+            email_et.setVisibility(View.VISIBLE);
+            name_txt.setVisibility(View.VISIBLE);
+            name_et.setVisibility(View.VISIBLE);
+            lname_txt.setVisibility(View.VISIBLE);
+            lname_et.setVisibility(View.VISIBLE);
+            registration_txtBtn.setText("Sign Up");
+            btn_sign_in.setText("Sign up");
+        }
+        else{
+            name_txt.setVisibility(View.GONE);
+            name_et.setVisibility(View.GONE);
+            lname_txt.setVisibility(View.GONE);
+            lname_et.setVisibility(View.GONE);
+            email_txt.setVisibility(View.GONE);
+            registration_txtBtn.setText("Sign In");
+            btn_sign_in.setText("Sign in");
         }
     }
 

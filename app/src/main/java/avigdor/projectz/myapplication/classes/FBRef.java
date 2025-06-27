@@ -8,5 +8,5 @@ public class FBRef {
     public static FirebaseAuth refAuth = FirebaseAuth.getInstance();
     public static FirebaseDatabase FBDP = FirebaseDatabase.getInstance();
     public static DatabaseReference refUser = FBDP.getReference("Users");
-    public static DatabaseReference refBirthday = FBDP.getReference("Birthday");
+    public static DatabaseReference refBirthday = FBDP.getReference("Tasks");
 }

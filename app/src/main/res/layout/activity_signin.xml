@@ -9,23 +9,66 @@
     tools:context=".SignIn">
 
     <TextView
-        android:id="@+id/login_title"
+        android:id="@+id/title_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign In Activity"
+        android:text="Sign In"
         android:padding="10dp"
         android:gravity="center"
         android:textSize="30sp"/>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="100dp" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
 
+            <TextView
+                android:id="@+id/name_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Name : "
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/name_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:visibility="gone" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/lname_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Last Name : "
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/lname_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="text"
+                android:visibility="gone" />
+        </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -69,6 +112,16 @@
                 />
         </TableRow>
     </TableLayout>
+
+    <TextView
+        android:id="@+id/error_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_gravity="center"
+        />
 
     <Button
         android:id="@+id/btn_sign_in"
