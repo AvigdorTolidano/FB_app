@@ -145,7 +145,7 @@ public class SignIn extends AppCompatActivity {
                     pd.dismiss();
                     if (task.isSuccessful()){
                         FirebaseUser user = refAuth.getCurrentUser();
-                        Toast.makeText(context, user.getEmail() + " successfuly signed in", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
 
                     }
                     else{
@@ -187,8 +187,9 @@ public class SignIn extends AppCompatActivity {
             name_et.setVisibility(View.VISIBLE);
             lname_txt.setVisibility(View.VISIBLE);
             lname_et.setVisibility(View.VISIBLE);
-            registration_txtBtn.setText("Sign Up");
+            registration_txtBtn.setText("Sign In");
             btn_sign_in.setText("Sign up");
+            title_txt.setText("Sign Up");
         }
         else{
             name_txt.setVisibility(View.GONE);
@@ -196,8 +197,9 @@ public class SignIn extends AppCompatActivity {
             lname_txt.setVisibility(View.GONE);
             lname_et.setVisibility(View.GONE);
             email_txt.setVisibility(View.GONE);
-            registration_txtBtn.setText("Sign In");
+            registration_txtBtn.setText("Sign Up");
             btn_sign_in.setText("Sign in");
+            title_txt.setText("Sign In");
         }
     }
 
