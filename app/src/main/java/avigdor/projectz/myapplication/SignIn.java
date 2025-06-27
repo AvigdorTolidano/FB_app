@@ -158,48 +158,49 @@ public class SignIn extends AppCompatActivity {
 
     }
     public void Exeptions(Exception exp){
-
-        if (exp instanceof FirebaseAuthInvalidCredentialsException){
-            error_txt.setText(exp.getMessage());
-            email_et.requestFocus();
-        } else if (exp instanceof FirebaseAuthInvalidUserException) {
-            error_txt.setText(exp.getMessage());
-            email_et.requestFocus();
-        }else if (exp instanceof FirebaseAuthWeakPasswordException) {
-            error_txt.setText(((FirebaseAuthWeakPasswordException) exp).getReason());
-            psw_et.requestFocus();
-        } else if(exp instanceof FirebaseAuthUserCollisionException){
-            error_txt.setText(exp.getMessage());
-            email_et.requestFocus();
-        } else if (exp instanceof FirebaseNetworkException) {
-            error_txt.setText(exp.getMessage());
-        } else{
-            Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show();
-        }
+        error_txt.setVisibility(View.VISIBLE);
+        error_txt.setText(exp.getMessage());
+//        if (exp instanceof FirebaseAuthInvalidCredentialsException){
+//            error_txt.setText(exp.getMessage());
+//            email_et.requestFocus();
+//        } else if (exp instanceof FirebaseAuthInvalidUserException) {
+//            error_txt.setText(exp.getMessage());
+//            email_et.requestFocus();
+//        }else if (exp instanceof FirebaseAuthWeakPasswordException) {
+//            error_txt.setText(((FirebaseAuthWeakPasswordException) exp).getReason());
+//            psw_et.requestFocus();
+//        } else if(exp instanceof FirebaseAuthUserCollisionException){
+//            error_txt.setText(exp.getMessage());
+//            email_et.requestFocus();
+//        } else if (exp instanceof FirebaseNetworkException) {
+//            error_txt.setText(exp.getMessage());
+//        } else{
+//            error_txt.setText("Something went wrong!");
+//        }
     }
 
     public void setView(View v){
         isNewUser = !isNewUser;
         if (isNewUser){
-            email_txt.setVisibility(View.VISIBLE);
-            email_et.setVisibility(View.VISIBLE);
+
             name_txt.setVisibility(View.VISIBLE);
             name_et.setVisibility(View.VISIBLE);
             lname_txt.setVisibility(View.VISIBLE);
             lname_et.setVisibility(View.VISIBLE);
-            registration_txtBtn.setText("Sign In");
+            registration_txtBtn.setText("allready have an account? click here !");
             btn_sign_in.setText("Sign up");
             title_txt.setText("Sign Up");
+            name_et.requestFocus();
         }
         else{
             name_txt.setVisibility(View.GONE);
             name_et.setVisibility(View.GONE);
             lname_txt.setVisibility(View.GONE);
             lname_et.setVisibility(View.GONE);
-            email_txt.setVisibility(View.GONE);
-            registration_txtBtn.setText("Sign Up");
+            registration_txtBtn.setText("dont have an account yet? click here !");
             btn_sign_in.setText("Sign in");
             title_txt.setText("Sign In");
+            email_et.requestFocus();
         }
     }
 

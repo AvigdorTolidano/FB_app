@@ -135,7 +135,7 @@
         android:id="@+id/registration_txtBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="dont have account yet? click here !"
+        android:text="dont have an account yet? click here !"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:textColor="@android:color/holo_blue_dark"
