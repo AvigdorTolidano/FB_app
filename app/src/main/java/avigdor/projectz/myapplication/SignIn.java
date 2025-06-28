@@ -159,24 +159,37 @@ public class SignIn extends AppCompatActivity {
     }
     public void Exeptions(Exception exp){
         error_txt.setVisibility(View.VISIBLE);
-        error_txt.setText(exp.getMessage());
-//        if (exp instanceof FirebaseAuthInvalidCredentialsException){
-//            error_txt.setText(exp.getMessage());
-//            email_et.requestFocus();
-//        } else if (exp instanceof FirebaseAuthInvalidUserException) {
-//            error_txt.setText(exp.getMessage());
-//            email_et.requestFocus();
-//        }else if (exp instanceof FirebaseAuthWeakPasswordException) {
-//            error_txt.setText(((FirebaseAuthWeakPasswordException) exp).getReason());
-//            psw_et.requestFocus();
-//        } else if(exp instanceof FirebaseAuthUserCollisionException){
-//            error_txt.setText(exp.getMessage());
-//            email_et.requestFocus();
-//        } else if (exp instanceof FirebaseNetworkException) {
-//            error_txt.setText(exp.getMessage());
-//        } else{
-//            error_txt.setText("Something went wrong!");
-//        }
+        String message = exp.getMessage();
+
+        if (exp instanceof FirebaseAuthInvalidCredentialsException){
+            error_txt.setText("email is not valid\nex: john.mclean@examplepetstore.com");
+            email_et.requestFocus();
+        }
+        else if (message.contains("PASSWORD_DOES_NOT_MEET_REQUIREMENTS")) {
+            int startIndex = message.indexOf("[Password");
+            int endIndex = message.lastIndexOf("]");
+            message = message.substring(startIndex + 1, endIndex - 2);
+            String [] massages = message.split(",");
+            message = "";
+            for(String msg : massages){
+                message += "•"+msg + "\n";
+            }
+            error_txt.setText(message);
+            psw_et.requestFocus();
+        }
+        else if(exp instanceof FirebaseAuthUserCollisionException){
+            error_txt.setText(exp.getMessage());
+            email_et.requestFocus();
+        }
+        else if (exp instanceof FirebaseNetworkException) {
+            error_txt.setText(exp.getMessage());
+        }
+        else{
+            error_txt.setText("There was a problem with the server.\n" +
+                    "Please check your internet connection and try again," +
+                    " or wait a moment and try again.");
+        }
+
     }
 
     public void setView(View v){
