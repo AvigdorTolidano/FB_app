@@ -6,28 +6,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SignIn">
+    tools:context=".AddTaskActivity">
 
     <TextView
-        android:id="@+id/title_txt"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign In"
-        android:padding="10dp"
-        android:gravity="center"
-        android:textSize="30sp"/>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:text="Add Task"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:padding="20dp"/>
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:visibility="visible">
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/class_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Class : " />
+
+            <EditText
+                android:id="@+id/class_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/num_class_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Class number : " />
+
+            <EditText
+                android:id="@+id/num_class_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:padding="10dp">
 
             <TextView
@@ -35,8 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Name : "
-                android:visibility="gone" />
+                android:text="Name : " />
 
             <EditText
                 android:id="@+id/name_et"
@@ -44,123 +82,79 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="text"
-                android:visibility="gone" />
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/desc_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Description : " />
+
+            <EditText
+                android:id="@+id/desc_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/start_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Start : " />
+
+            <EditText
+                android:id="@+id/start_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/lname_txt"
+                android:id="@+id/end_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Last Name : "
-                android:visibility="gone" />
+                android:text="End : " />
 
             <EditText
-                android:id="@+id/lname_et"
+                android:id="@+id/end_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ems="10"
-                android:inputType="text"
-                android:visibility="gone" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/email_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Email : "
-                />
-
-            <EditText
-                android:id="@+id/email_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/psw_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Password : "
-                />
-
-            <EditText
-                android:id="@+id/psw_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="15"
-                android:inputType="textPassword"
-                />
+                android:inputType="text" />
         </TableRow>
     </TableLayout>
 
-    <TextView
-        android:id="@+id/error_txt"
+    <Button
+        android:id="@+id/add_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:visibility="gone"
-        android:textColor="@android:color/holo_red_dark"
         android:layout_gravity="center"
-        />
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:text="Add"
+        android:textSize="20sp"
         android:padding="10dp"
-        android:layout_gravity="center">
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
-            <Button
-                android:id="@+id/btn_sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sign In"
-                android:layout_gravity="center"/>
-            <CheckBox
-                android:id="@+id/check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="remember me"
-                android:layout_gravity="center"
-                android:visibility="visible"
-                android:checked="false"/>
-        </TableRow>
-
-
-    </TableLayout>
-
-
-    <TextView
-        android:id="@+id/registration_txtBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="dont have an account yet? click here !"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:clickable="true"
-        />
-
+        android:onClick="addTask"/>
 </LinearLayout>

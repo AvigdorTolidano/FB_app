@@ -5,6 +5,8 @@ public class Tasks {
             taskName, taskDescription, taskStatus,
             taskStartDate, taskEndDate, taskPicUrl;
 
+
+
     public Tasks() {}
 
     public Tasks(String taskID, String taskClass, String taskNumClass,
@@ -43,6 +45,9 @@ public class Tasks {
 
     public String getTaskName() {
         return taskName;
+    }
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
 
     public void setTaskName(String taskName) {

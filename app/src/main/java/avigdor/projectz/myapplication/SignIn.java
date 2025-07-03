@@ -7,9 +7,12 @@ import static avigdor.projectz.myapplication.classes.FBRef.refUser;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,9 +45,12 @@ public class SignIn extends AppCompatActivity {
     EditText email_et , psw_et , name_et , lname_et ;
     TextView email_txt , name_txt , lname_txt , title_txt , registration_txtBtn , error_txt;
     Button btn_sign_in;
-    boolean isNewUser;
+    boolean isNewUser, isRememberMe;
     ProgressDialog pd;
     Intent intent;
+    CheckBox remember_me;
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,17 @@ public class SignIn extends AppCompatActivity {
 
         init();
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = refAuth.getCurrentUser();
+        if (user != null && isRememberMe) {
+            Log.i("user", "Auto login for: " + user.getUid());
+            startActivity(intent);
+            finish();
+        }
+    }
+
 
     public void init () {
         email_et = findViewById(R.id.email_et);
@@ -66,7 +83,14 @@ public class SignIn extends AppCompatActivity {
         title_txt = findViewById(R.id.title_txt);
         registration_txtBtn = findViewById(R.id.registration_txtBtn);
         error_txt = findViewById(R.id.error_txt);
+        remember_me = findViewById(R.id.check_box);
+
         isNewUser = false;
+
+        sp = getSharedPreferences("rememberMe", MODE_PRIVATE);
+        isRememberMe = sp.getBoolean("rememberMe", false);
+
+        intent = new Intent(context, MainActivity.class);
 
         btn_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +104,17 @@ public class SignIn extends AppCompatActivity {
             public void onClick(View v) { setView(v); }
         });
 
+        remember_me.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor = sp.edit();
+                editor.putBoolean("rememberMe", remember_me.isChecked());
+                isRememberMe = remember_me.isChecked();
+                editor.commit();
+            }
+        });
+
         pd = new ProgressDialog(context);
-        pd.setTitle("Sign in");
-        pd.setMessage("Signing in...");
-        intent = new Intent(context, MainActivity.class);
     }
 
     public void signIU(View view) {
@@ -93,11 +124,15 @@ public class SignIn extends AppCompatActivity {
         if (isNewUser){
             String name = name_et.getText().toString();
             String lname = lname_et.getText().toString();
+
             pd.setTitle("Sign up");
             pd.setMessage("Signing up...");
+
             if (email.isEmpty() || password.isEmpty() || name.isEmpty() || lname.isEmpty()) {
+
                 error_txt.setText("please fill all fields!");
                 error_txt.setVisibility(View.VISIBLE);
+
                 if (name.isEmpty()) {
                     name_et.requestFocus();
                 }
@@ -120,8 +155,8 @@ public class SignIn extends AppCompatActivity {
                         if (task.isSuccessful()){
                             FirebaseUser user = refAuth.getCurrentUser();
                             refUser.child(user.getUid()).setValue(new User(name,lname,email,user.getUid()));
-
                             startActivity(intent);
+                            finish();
                         }
                         else{
                             Exeptions(task.getException());
@@ -145,8 +180,9 @@ public class SignIn extends AppCompatActivity {
                     pd.dismiss();
                     if (task.isSuccessful()){
                         FirebaseUser user = refAuth.getCurrentUser();
+                        Log.i("SignIn", "Success! User: " + user.getUid());
                         startActivity(intent);
-
+                        finish();
                     }
                     else{
                         Exeptions(task.getException());
@@ -154,16 +190,16 @@ public class SignIn extends AppCompatActivity {
                 }
             });
 
-        }
 
+        }
     }
     public void Exeptions(Exception exp){
         error_txt.setVisibility(View.VISIBLE);
         String message = exp.getMessage();
 
         if (exp instanceof FirebaseAuthInvalidCredentialsException){
-            error_txt.setText("email is not valid\nex: john.mclean@examplepetstore.com");
-            email_et.requestFocus();
+                error_txt.setText("Invalid email or password. Please check your credentials.");
+                email_et.requestFocus();
         }
         else if (message.contains("PASSWORD_DOES_NOT_MEET_REQUIREMENTS")) {
             int startIndex = message.indexOf("[Password");
@@ -216,6 +252,8 @@ public class SignIn extends AppCompatActivity {
             email_et.requestFocus();
         }
     }
+
+
 
 }
 

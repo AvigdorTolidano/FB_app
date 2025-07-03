@@ -6,7 +6,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class FBRef {
     public static FirebaseAuth refAuth = FirebaseAuth.getInstance();
+
+    public static String userID = refAuth.getCurrentUser().getUid();
     public static FirebaseDatabase FBDP = FirebaseDatabase.getInstance();
     public static DatabaseReference refUser = FBDP.getReference("Users");
-    public static DatabaseReference refBirthday = FBDP.getReference("Tasks");
+    public static DatabaseReference refTasks = FBDP.getReference("Tasks");
 }
