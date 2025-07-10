@@ -3,7 +3,8 @@ package avigdor.projectz.myapplication.classes;
 public class Tasks {
     private String taskID, taskClass, taskNumClass,
             taskName, taskDescription, taskStatus,
-            taskStartDate, taskEndDate, taskPicUrl;
+            taskStartDate, taskEndDate, taskPicUrl,
+            taskYear;
 
 
 
@@ -11,7 +12,8 @@ public class Tasks {
 
     public Tasks(String taskID, String taskClass, String taskNumClass,
                  String taskName, String taskDescription, String taskStatus,
-                 String taskStartDate, String taskEndDate, String taskPicUrl) {
+                 String taskStartDate, String taskEndDate, String taskPicUrl,
+                 String taskYear) {
         this.taskID = taskID;
         this.taskClass = taskClass;
         this.taskNumClass = taskNumClass;
@@ -21,6 +23,7 @@ public class Tasks {
         this.taskStartDate = taskStartDate;
         this.taskEndDate = taskEndDate;
         this.taskPicUrl = taskPicUrl;
+        this.taskYear = taskYear;
     }
 
     public String getTaskID() {
@@ -89,6 +92,7 @@ public class Tasks {
     public String getTaskPicUrl() {
         return taskPicUrl;
     }
+    public String getTaskYear(){return taskYear;}
 
     public void setTaskPicUrl(String taskPicUrl) {
         this.taskPicUrl = taskPicUrl;

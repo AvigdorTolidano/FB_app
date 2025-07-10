@@ -11,4 +11,5 @@ public class FBRef {
     public static FirebaseDatabase FBDP = FirebaseDatabase.getInstance();
     public static DatabaseReference refUser = FBDP.getReference("Users");
     public static DatabaseReference refTasks = FBDP.getReference("Tasks");
+    public static Tasks task;
 }

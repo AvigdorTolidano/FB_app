@@ -15,12 +15,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Date;
 
+import avigdor.projectz.myapplication.classes.FBRef;
 import avigdor.projectz.myapplication.classes.Tasks;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    EditText start_et,end_et,desc_et,name_et,num_class_et,class_et;
-
+    EditText start_et,end_et,desc_et,name_et,num_class_et,class_et,year_et;
+    String schoolYear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,21 +38,20 @@ public class AddTaskActivity extends AppCompatActivity {
         name_et = findViewById(R.id.name_et);
         num_class_et = findViewById(R.id.num_class_et);
         class_et = findViewById(R.id.class_et);
+        year_et = findViewById(R.id.year_et);
     }
 
     public void addTask(View view) {
-        Date date = new Date();
-        int year = date.getYear() + 1900;
-        int nextYear = year+1;
-        String schoolYear = String.valueOf(year).substring(2) +
-                "-" + String.valueOf(nextYear).substring(2);
+
         String start = start_et.getText().toString();
         String end = end_et.getText().toString();
         String desc = desc_et.getText().toString();
         String name = name_et.getText().toString();
         String numClass = num_class_et.getText().toString();
         String className = class_et.getText().toString();
-        Tasks task = new Tasks(userID,className,numClass,name,desc,"active",start,end,"");
+        String schoolYear = year_et.getText().toString();
+
+        Tasks task = new Tasks(refTasks.push().getKey(),className,numClass,name,desc,"active",start,end,"",schoolYear);
         refTasks.child(userID).child(schoolYear).child(className+numClass).child(end).setValue(task);
         finish();
     }

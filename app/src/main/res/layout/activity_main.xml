@@ -32,23 +32,56 @@
         android:text="add task"
         android:layout_gravity="center"
         android:layout_marginTop="20dp" />
-
-    <TextView
-        android:id="@+id/active_txt"
+    <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="active tasks"
-        android:clickable="true"
-        android:layout_gravity="center"/>
-
-    <TextView
-        android:id="@+id/history_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="history tasks"
-        android:clickable="true"
+        android:padding="10dp"
+        android:visibility="visible"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        >
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/correct_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="order"
+            android:text="Correct Year" />
+
+        <TextView
+            android:id="@+id/next_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="order"
+            android:text="Next Year"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/all_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="order"
+            android:text="all"
+            android:visibility="visible"
+            tools:ignore="OnClick" />
+
+    </TableRow>
+    </TableLayout>
+
 
 
 </LinearLayout>

@@ -63,15 +63,23 @@ public class CustomAdapter extends BaseAdapter {
         Tasks task = tasks.get(position);
         holder.taskName.setText(task.getTaskName());
         holder.taskClass.setText(task.getTaskClass());
-        holder.checked.setChecked(false);
+        if (task.getTaskStatus().equals("active")) {
+            holder.checked.setChecked(false);
+        }else {
+            holder.checked.setChecked(true);
+        }
+        //holder.checked.setChecked(false);
+
         holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            FBRef.task = task;
             holder.checked.setChecked(isChecked);
             if (holder.checked.isChecked()) {
                 task.setTaskStatus("done");
+
             }else {
                 task.setTaskStatus("active");
             }
-
+            refTasks.child(userID).child(task.getTaskYear()).child(task.getTaskClass()+task.getTaskNumClass()).child(task.getTaskEndDate()).setValue(task);
         });
         return view;
     }
