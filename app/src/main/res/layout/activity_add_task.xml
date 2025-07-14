@@ -168,13 +168,18 @@
         </TableRow>
     </TableLayout>
 
-    <Button
-        android:id="@+id/add_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Add"
-        android:textSize="20sp"
-        android:padding="10dp"
-        android:onClick="addTask"/>
+            <Button
+                android:id="@+id/add_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Add"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:onClick="addTask"/>
+
+
+
+
+
 </LinearLayout>

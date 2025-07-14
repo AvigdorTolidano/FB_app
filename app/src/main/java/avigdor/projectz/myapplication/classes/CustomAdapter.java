@@ -71,7 +71,7 @@ public class CustomAdapter extends BaseAdapter {
         //holder.checked.setChecked(false);
 
         holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            FBRef.task = task;
+
             holder.checked.setChecked(isChecked);
             if (holder.checked.isChecked()) {
                 task.setTaskStatus("done");
